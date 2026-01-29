@@ -140,7 +140,7 @@ public class BenchmarkActivity extends AppCompatActivity {
                                 startInstant = Instant.now();
                                 pendingStart = false;
                                 burstModeFirstScan = false;
-                                updateResults(nbScans, "00:00:00.000", "N/A");
+                                updateResults(nbScans, getString(R.string.default_time), getString(R.string.default_na));
                             } else {
                                 // Calculate time elapsed since start date and number of scans per seconds
                                 lastScanInstant = Instant.now();
@@ -155,11 +155,11 @@ public class BenchmarkActivity extends AppCompatActivity {
                                 String scanPerSecondsFormatted = String.format("%.2f", scansPerSeconds);
                                 updateResults(nbScans, formattedTime, scanPerSecondsFormatted);
                             }
-                            addLineToResults("Success scanning " + typology + " barcode.");
+                            addLineToResults(getString(R.string.msg_scan_success, typology));
                         }
                         else {
-                            addLineToResults("Source: " + source);
-                            addLineToResults("Typology: " + typology+ ", Data: " + data);
+                            addLineToResults(getString(R.string.msg_scan_source, source));
+                            addLineToResults(getString(R.string.msg_scan_typology_data, typology, data));
                         }
                     }
                 }
@@ -179,12 +179,12 @@ public class BenchmarkActivity extends AppCompatActivity {
                         @Override
                         public void result(String profileName, String action, String command, String result, String resultInfo, String commandidentifier) {
                             if(result.equalsIgnoreCase(DataWedgeConstants.COMMAND_RESULT_SUCCESS)) {
-                                addLineToResults("New scanner selected with success:" + selectedScanner.mName);
+                                addLineToResults(getString(R.string.msg_scanner_selected, selectedScanner.mName));
                                 mScannerIndex = fPosition;
                             }
                             else
                             {
-                                addLineToResults("Error while trying to switch to new scanner:" + selectedScanner.mName);
+                                addLineToResults(getString(R.string.msg_error_switch_scanner, selectedScanner.mName));
                                 BenchmarkActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -239,7 +239,7 @@ public class BenchmarkActivity extends AppCompatActivity {
         super.onResume();
         if(((MainApplication)getApplication()).profileExists)
         {
-            addLineToResults("Profile already exists.");
+            addLineToResults(getString(R.string.msg_profile_already_exists));
             // The main application has already created the profile
             onProfileCreated();
         }
@@ -296,7 +296,7 @@ public class BenchmarkActivity extends AppCompatActivity {
     }
 
     private void resetProfile() {
-        addLineToResults("Resetting profile");
+        addLineToResults(getString(R.string.msg_resetting_profile));
         // Reset settings class to initial values in case we were in BurstMode
         DatawedgeSettings.initSettings(this);
 
@@ -304,22 +304,22 @@ public class BenchmarkActivity extends AppCompatActivity {
         CreateProfileHelper.createProfile(BenchmarkActivity.this, DatawedgeSettings.mSetConfigSettingsScanner, new CreateProfileHelper.CreateProfileHelperCallback() {
             @Override
             public void onSuccess(String profileName) {
-                addLineToResults("Profile reset successful.");
+                addLineToResults(getString(R.string.msg_profile_reset_success));
                 // Reset burst mode
                 burstmode = false;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        bt_burstmode.setText("Normal Mode");
+                        bt_burstmode.setText(R.string.btn_normal_mode);
                     }
                 });
             }
 
             @Override
             public void onError(String profileName, String error, String errorMessage) {
-                addLineToResults("Error while trying to reset profile:" + profileName);
-                addLineToResults("Error:" + error);
-                addLineToResults("ErrorMessage:" + errorMessage);
+                addLineToResults(getString(R.string.msg_error_reset_profile, profileName));
+                addLineToResults(getString(R.string.msg_error, error));
+                addLineToResults(getString(R.string.msg_error_message, errorMessage));
             }
 
             @Override
@@ -349,12 +349,12 @@ public class BenchmarkActivity extends AppCompatActivity {
         startInstant = null;
         lastScanInstant = null;
         mResults = "";
-        updateResults(nbScans, "00:00:00.000", "N/A");
+        updateResults(nbScans, getString(R.string.default_time), getString(R.string.default_na));
         // Reset status edit text
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                bt_start.setText("Start");
+                bt_start.setText(R.string.btn_start);
                 et_results.setText(mResults);
             }
         });
@@ -371,31 +371,31 @@ public class BenchmarkActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                bt_start.setText("Stop Benchmark");
+                bt_start.setText(R.string.btn_stop_benchmark);
             }
         });
         benchmarking = true;
         pendingStart = true;
-        addLineToResults("Waiting for first scan to start Benchmark.");
+        addLineToResults(getString(R.string.msg_waiting_first_scan));
     }
 
     private void stopBenchmark() {
         bt_reset.setEnabled(true);
         bt_burstmode.setEnabled(true);
         sp_ScannerDevices.setEnabled(true);
-        addLineToResults("Benchmark stopped.");
+        addLineToResults(getString(R.string.msg_benchmark_stopped));
         benchmarking = false;
         pendingStart = false;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                bt_start.setText("Start Benchmark");
+                bt_start.setText(R.string.btn_start_benchmark);
             }
         });
     }
 
     private void enumerateScannerDevices() {
-        addLineToResults("Enumerating scanners.");
+        addLineToResults(getString(R.string.msg_enumerating_scanners));
         DWEnumerateScanners dwEnumerateScanners = new DWEnumerateScanners(this);
         DWEnumerateScannersSettings settings = new DWEnumerateScannersSettings()
         {{
@@ -408,7 +408,7 @@ public class BenchmarkActivity extends AppCompatActivity {
                 mScannerList = new ArrayList<DWEnumerateScanners.Scanner>(scannerList);
                 int spinnerIndex = 0;
                 if ((scannerList != null) && (scannerList.size() != 0)) {
-                    addLineToResults("Scanner enumeration succeeded, found " + scannerList.size() + " scanners.");
+                    addLineToResults(getString(R.string.msg_enumeration_success, scannerList.size()));
                     Iterator<DWEnumerateScanners.Scanner> it = scannerList.iterator();
                     while(it.hasNext()) {
                         DWEnumerateScanners.Scanner scanner = it.next();
@@ -417,12 +417,12 @@ public class BenchmarkActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    addLineToResults("Failed to get the list of supported scanner devices! Please close and restart the application.");
+                    addLineToResults(getString(R.string.msg_error_scanner_list));
                 }
 
                 // Add auto scanner selection
                 DWEnumerateScanners.Scanner autoScanner = new DWEnumerateScanners.Scanner();
-                autoScanner.mName = "AUTO";
+                autoScanner.mName = getString(R.string.scanner_auto);
                 autoScanner.mScannerIdentifier = SC_E_SCANNER_IDENTIFIER.AUTO;
                 friendlyNameList.add(0, autoScanner.mName);
                 mScannerList.add(0, autoScanner);
@@ -444,7 +444,7 @@ public class BenchmarkActivity extends AppCompatActivity {
 
             @Override
             public void timeOut(String profileName) {
-                addLineToResults("Timeout while trying to enumerate scanners");
+                addLineToResults(getString(R.string.msg_enumeration_timeout));
             }
         });
     }
@@ -460,27 +460,27 @@ public class BenchmarkActivity extends AppCompatActivity {
                     switch(status)
                     {
                         case DataWedgeConstants.SCAN_STATUS_CONNECTED:
-                            addLineToResults("Scanner is connected.");
+                            addLineToResults(getString(R.string.msg_scanner_connected));
                             break;
                         case DataWedgeConstants.SCAN_STATUS_DISABLED:
-                            addLineToResults("Scanner is disabled.");
+                            addLineToResults(getString(R.string.msg_scanner_disabled));
                             break;
                         case DataWedgeConstants.SCAN_STATUS_DISCONNECTED:
-                            addLineToResults("Scanner is disconnected.");
+                            addLineToResults(getString(R.string.msg_scanner_disconnected));
                             break;
                         case DataWedgeConstants.SCAN_STATUS_SCANNING:
-                            addLineToResults("Scanner is scanning.");
+                            addLineToResults(getString(R.string.msg_scanner_scanning));
                             break;
                         case DataWedgeConstants.SCAN_STATUS_WAITING:
                             if(burstmode)
                             {
                                 burstModeFirstScan = true;
                             }
-                            addLineToResults("Scanner is waiting.");
+                            addLineToResults(getString(R.string.msg_scanner_waiting));
 
                             break;
                         case DataWedgeConstants.SCAN_STATUS_IDLE:
-                            addLineToResults("Scanner is idle.");
+                            addLineToResults(getString(R.string.msg_scanner_idle));
                             if(burstmode)
                             {
                                 burstModeFirstScan = true;
@@ -491,7 +491,7 @@ public class BenchmarkActivity extends AppCompatActivity {
             };
         }};
 
-        addLineToResults("Setting up scanner status checking on package : " + profileStatusSettings.mPackageName + ".");
+        addLineToResults(getString(R.string.msg_status_checker_setup, profileStatusSettings.mPackageName));
 
         mStatusReceiver = new DWStatusScanner(BenchmarkActivity.this, profileStatusSettings);
         mStatusReceiver.start();
@@ -563,20 +563,20 @@ public class BenchmarkActivity extends AppCompatActivity {
             public void result(String profileName, String action, String command, String result, String resultInfo, String commandidentifier) {
                 if(result.equalsIgnoreCase(DataWedgeConstants.COMMAND_RESULT_SUCCESS)) {
                     if(targetMode) {
-                        addLineToResults("Scanner set to burst mode successfully");
+                        addLineToResults(getString(R.string.msg_scanner_burst_mode_success));
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                bt_burstmode.setText("Normal Mode");
+                                bt_burstmode.setText(R.string.btn_normal_mode);
                             }
                         });
                     }
                     else {
-                        addLineToResults("Scanner set to normal mode successfully");
+                        addLineToResults(getString(R.string.msg_scanner_normal_mode_success));
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                bt_burstmode.setText("Burst Mode");
+                                bt_burstmode.setText(R.string.btn_burst_mode);
                             }
                         });
                     }
@@ -585,9 +585,9 @@ public class BenchmarkActivity extends AppCompatActivity {
                 else
                 {
                     if(targetMode)
-                        addLineToResults("Error while trying to set scanner to burst mode");
+                        addLineToResults(getString(R.string.msg_error_burst_mode));
                     else
-                        addLineToResults("Error while trying to set scanner to normal mode");
+                        addLineToResults(getString(R.string.msg_error_normal_mode));
                 }
             }
 

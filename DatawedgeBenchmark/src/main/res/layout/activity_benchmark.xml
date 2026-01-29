@@ -24,7 +24,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:text="Nb Scans:"/>
+                android:text="@string/label_nb_scans"/>
 
             <TextView
                 android:id="@+id/tv_nbScans"
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="right"
-                android:text="0"/>
+                android:text="@string/default_zero"/>
 
         </LinearLayout>
 
@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:text="Time elapsed: "/>
+                android:text="@string/label_time_elapsed"/>
 
             <TextView
                 android:id="@+id/tv_timeElapsed"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="right"
-                android:text="00:00:00.000"/>
+                android:text="@string/default_time"/>
 
         </LinearLayout>
 
@@ -66,7 +66,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:text="Scans/s: "/>
+                android:text="@string/label_scans_per_second"/>
 
             <TextView
                 android:id="@+id/tv_nbScansPerS"
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="right"
-                android:text="0"/>
+                android:text="@string/default_zero"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -114,7 +114,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Start"
+            android:text="@string/btn_start"
             android:textSize="10sp" />
 
         <Button
@@ -122,7 +122,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Reset"
+            android:text="@string/btn_reset"
             android:textSize="10sp" />
     </LinearLayout>
 
@@ -139,7 +139,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Burst Mode"
+            android:text="@string/btn_burst_mode"
             android:textSize="10sp" />
 
     </LinearLayout>

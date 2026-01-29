@@ -40,7 +40,7 @@ public class MainApplication extends Application {
                         public void onSuccess(String profileName) {
                             profileExists = true;
                             if (BenchmarkActivity.benchmarkActivity != null) {
-                                BenchmarkActivity.benchmarkActivity.addLineToResults("Profile creation of: " + profileName + " succeeded.");
+                                BenchmarkActivity.benchmarkActivity.addLineToResults(getString(R.string.msg_profile_creation_success, profileName));
                                 BenchmarkActivity.benchmarkActivity.onProfileCreated();
                             }
                         }
@@ -48,9 +48,9 @@ public class MainApplication extends Application {
                         @Override
                         public void onError(String profileName, String error, String errorMessage) {
                             if (BenchmarkActivity.benchmarkActivity != null) {
-                                BenchmarkActivity.benchmarkActivity.addLineToResults("Error while trying to create profile:" + profileName);
-                                BenchmarkActivity.benchmarkActivity.addLineToResults("Error:" + error);
-                                BenchmarkActivity.benchmarkActivity.addLineToResults("ErrorMessage:" + errorMessage);
+                                BenchmarkActivity.benchmarkActivity.addLineToResults(getString(R.string.msg_error_create_profile, profileName));
+                                BenchmarkActivity.benchmarkActivity.addLineToResults(getString(R.string.msg_error, error));
+                                BenchmarkActivity.benchmarkActivity.addLineToResults(getString(R.string.msg_error_message, errorMessage));
                             }
                         }
 
@@ -64,7 +64,7 @@ public class MainApplication extends Application {
                 {
                     profileExists = true;
                     if (BenchmarkActivity.benchmarkActivity != null) {
-                        BenchmarkActivity.benchmarkActivity.addLineToResults("Profile already exists");
+                        BenchmarkActivity.benchmarkActivity.addLineToResults(getString(R.string.msg_profile_already_exists));
                         BenchmarkActivity.benchmarkActivity.onProfileCreated();
                     }
                 }
@@ -73,7 +73,7 @@ public class MainApplication extends Application {
             @Override
             public void timeOut(String profileName) {
                 if (BenchmarkActivity.benchmarkActivity != null) {
-                    BenchmarkActivity.benchmarkActivity.addLineToResults("Timeout while checking if profile exists");
+                    BenchmarkActivity.benchmarkActivity.addLineToResults(getString(R.string.msg_profile_check_timeout));
                 }
             }
         });

@@ -1,0 +1,72 @@
+<resources>
+    <string name="app_name">DatawedgeBenchmark</string>
+
+    <!-- Layout strings -->
+    <string name="label_nb_scans">Nb Scans :</string>
+    <string name="label_time_elapsed">Temps écoulé : </string>
+    <string name="label_scans_per_second">Scans/s : </string>
+    <string name="default_zero">0</string>
+    <string name="default_time">00:00:00.000</string>
+    <string name="default_na">N/A</string>
+
+    <!-- Button labels -->
+    <string name="btn_start">Démarrer</string>
+    <string name="btn_reset">Réinitialiser</string>
+    <string name="btn_burst_mode">Mode Rafale</string>
+    <string name="btn_normal_mode">Mode Normal</string>
+    <string name="btn_stop_benchmark">Arrêter le Benchmark</string>
+    <string name="btn_start_benchmark">Démarrer le Benchmark</string>
+
+    <!-- Menu -->
+    <string name="menu_reset_profile">Réinitialiser le Profil</string>
+
+    <!-- Scanner selection -->
+    <string name="scanner_auto">AUTO</string>
+
+    <!-- Status messages -->
+    <string name="msg_profile_already_exists">Le profil existe déjà.</string>
+    <string name="msg_profile_creation_success">Création du profil : %s réussie.</string>
+    <string name="msg_profile_reset_success">Réinitialisation du profil réussie.</string>
+    <string name="msg_resetting_profile">Réinitialisation du profil</string>
+
+    <!-- Error messages -->
+    <string name="msg_error_create_profile">Erreur lors de la création du profil : %s</string>
+    <string name="msg_error_reset_profile">Erreur lors de la réinitialisation du profil : %s</string>
+    <string name="msg_error">Erreur : %s</string>
+    <string name="msg_error_message">Message d\'erreur : %s</string>
+    <string name="msg_error_switch_scanner">Erreur lors du changement de scanner : %s</string>
+    <string name="msg_error_scanner_list">Impossible d\'obtenir la liste des scanners ! Veuillez fermer et redémarrer l\'application.</string>
+    <string name="msg_error_burst_mode">Erreur lors du passage en mode rafale</string>
+    <string name="msg_error_normal_mode">Erreur lors du passage en mode normal</string>
+
+    <!-- Scanner status messages -->
+    <string name="msg_scanner_connected">Scanner connecté.</string>
+    <string name="msg_scanner_disabled">Scanner désactivé.</string>
+    <string name="msg_scanner_disconnected">Scanner déconnecté.</string>
+    <string name="msg_scanner_scanning">Scan en cours.</string>
+    <string name="msg_scanner_waiting">Scanner en attente.</string>
+    <string name="msg_scanner_idle">Scanner inactif.</string>
+    <string name="msg_scanner_selected">Nouveau scanner sélectionné avec succès : %s</string>
+    <string name="msg_scanner_burst_mode_success">Scanner configuré en mode rafale avec succès</string>
+    <string name="msg_scanner_normal_mode_success">Scanner configuré en mode normal avec succès</string>
+
+    <!-- Scan results -->
+    <string name="msg_scan_success">Scan réussi du code-barres %s.</string>
+    <string name="msg_scan_source">Source : %s</string>
+    <string name="msg_scan_typology_data">Typologie : %1$s, Données : %2$s</string>
+
+    <!-- Benchmark messages -->
+    <string name="msg_waiting_first_scan">En attente du premier scan pour démarrer le Benchmark.</string>
+    <string name="msg_benchmark_stopped">Benchmark arrêté.</string>
+
+    <!-- Enumeration messages -->
+    <string name="msg_enumerating_scanners">Énumération des scanners.</string>
+    <string name="msg_enumeration_success">Énumération réussie, %d scanners trouvés.</string>
+    <string name="msg_enumeration_timeout">Délai d\'attente dépassé lors de l\'énumération des scanners</string>
+
+    <!-- Profile checker messages -->
+    <string name="msg_profile_check_timeout">Délai d\'attente dépassé lors de la vérification du profil</string>
+
+    <!-- Status checker -->
+    <string name="msg_status_checker_setup">Configuration de la vérification du statut du scanner sur le package : %s.</string>
+</resources>
