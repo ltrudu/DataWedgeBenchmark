@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,7 +48,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class BenchmarkActivity extends AppCompatActivity {
 
-    private static String TAG = "DWBenchmark";
+    public static String TAG = "DWBenchmark";
+
+    public static BenchmarkActivity benchmarkActivity = null;
 
     private TextView et_results;
     private ScrollView sv_results;
@@ -64,11 +68,10 @@ public class BenchmarkActivity extends AppCompatActivity {
     private List<DWEnumerateScanners.Scanner> mScannerList = null;
     private int mScannerIndex = 0;
 
-    private boolean profileCreated = false;
-    private boolean firstWaitAfterProfileCreation = false;
     private boolean pendingStart = false;
     private boolean benchmarking = false;
     private boolean burstmode = false;
+    private boolean burstModeFirstScan = false;
     private int nbScans = 0;
     private Instant startInstant;
     private Instant lastScanInstant;
@@ -97,6 +100,7 @@ public class BenchmarkActivity extends AppCompatActivity {
             return insets;
         });
 
+
         et_results = findViewById(R.id.et_results);
         sv_results = findViewById(R.id.sv_status);
         tv_nbScans = findViewById(R.id.tv_nbScans);
@@ -112,31 +116,6 @@ public class BenchmarkActivity extends AppCompatActivity {
         bt_burstmode.setEnabled(false);
         sp_ScannerDevices.setEnabled(false);
 
-
-        // Initialize datawedge settings
-        DatawedgeSettings.initSettings(this);
-
-        CreateProfileHelper.createProfile(this, DatawedgeSettings.mSetConfigSettingsScanner, new CreateProfileHelper.CreateProfileHelperCallback() {
-            @Override
-            public void onSuccess(String profileName) {
-                addLineToResults("Profile creation of: " + profileName + " succeeded.");
-                profileCreated = true;
-                firstWaitAfterProfileCreation = true;
-            }
-
-            @Override
-            public void onError(String profileName, String error, String errorMessage) {
-                addLineToResults("Error while trying to create profile:" + profileName);
-                addLineToResults("Error:" + error);
-                addLineToResults("ErrorMessage:" + errorMessage);
-            }
-
-            @Override
-            public void ondebugMessage(String profileName, String message) {
-                Log.d(TAG, message);
-            }
-        });
-
         /**
          * Initialize the scan receiver
          */
@@ -149,11 +128,18 @@ public class BenchmarkActivity extends AppCompatActivity {
                     public void scannedData(String source, String data, String typology) {
                         if(benchmarking) {
                             nbScans++;
-                            if (pendingStart == true) {
+                            if (pendingStart == true || burstModeFirstScan == true) {
+                                if(burstModeFirstScan == true)
+                                {
+                                    // Force nbScans to 1 since we don't know if the scan has been relaunched
+                                    // for the second time
+                                    nbScans = 1;
+                                }
                                 // This is the first scan
                                 // We start the counter
                                 startInstant = Instant.now();
                                 pendingStart = false;
+                                burstModeFirstScan = false;
                                 updateResults(nbScans, "00:00:00.000", "N/A");
                             } else {
                                 // Calculate time elapsed since start date and number of scans per seconds
@@ -251,14 +237,36 @@ public class BenchmarkActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(((MainApplication)getApplication()).profileExists)
+        {
+            addLineToResults("Profile already exists.");
+            // The main application has already created the profile
+            onProfileCreated();
+        }
+        benchmarkActivity = this;
+    }
+
+    public void onProfileCreated()
+    {
         mScanReceiver.startReceive();
         setupScannerStatusChecker();
         // Enumerate scanners
         enumerateScannerDevices();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                bt_reset.setEnabled(true);
+                bt_start.setEnabled(true);
+                bt_burstmode.setEnabled(true);
+                sp_ScannerDevices.setEnabled(true);
+            }
+        });
     }
 
     @Override
     protected void onPause() {
+        benchmarkActivity = null;
         mScanReceiver.stopReceive();
         if(mScrollDownRunnable != null)
         {
@@ -270,6 +278,55 @@ public class BenchmarkActivity extends AppCompatActivity {
         // Stop the benchmark
         stopBenchmark();
         super.onPause();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_benchmark, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_reset_profile) {
+            resetProfile();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void resetProfile() {
+        addLineToResults("Resetting profile");
+        // Reset settings class to initial values in case we were in BurstMode
+        DatawedgeSettings.initSettings(this);
+
+        // Recreate profile with initial settings
+        CreateProfileHelper.createProfile(BenchmarkActivity.this, DatawedgeSettings.mSetConfigSettingsScanner, new CreateProfileHelper.CreateProfileHelperCallback() {
+            @Override
+            public void onSuccess(String profileName) {
+                addLineToResults("Profile reset successful.");
+                // Reset burst mode
+                burstmode = false;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bt_burstmode.setText("Normal Mode");
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String profileName, String error, String errorMessage) {
+                addLineToResults("Error while trying to reset profile:" + profileName);
+                addLineToResults("Error:" + error);
+                addLineToResults("ErrorMessage:" + errorMessage);
+            }
+
+            @Override
+            public void ondebugMessage(String profileName, String message) {
+                Log.d(BenchmarkActivity.TAG, message);
+            }
+        });
     }
 
     private void updateResults(int nbScans, String formattedTime, String nbScansPerS)
@@ -415,28 +472,19 @@ public class BenchmarkActivity extends AppCompatActivity {
                             addLineToResults("Scanner is scanning.");
                             break;
                         case DataWedgeConstants.SCAN_STATUS_WAITING:
-                            if(profileCreated == false)
+                            if(burstmode)
                             {
-                                return;
-                            }
-                            if(firstWaitAfterProfileCreation)
-                            {
-                                firstWaitAfterProfileCreation = false;
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        bt_reset.setEnabled(true);
-                                        bt_start.setEnabled(true);
-                                        bt_burstmode.setEnabled(true);
-                                        sp_ScannerDevices.setEnabled(true);
-                                    }
-                                });
+                                burstModeFirstScan = true;
                             }
                             addLineToResults("Scanner is waiting.");
 
                             break;
                         case DataWedgeConstants.SCAN_STATUS_IDLE:
                             addLineToResults("Scanner is idle.");
+                            if(burstmode)
+                            {
+                                burstModeFirstScan = true;
+                            }
                             break;
                     }
                 }
@@ -455,7 +503,7 @@ public class BenchmarkActivity extends AppCompatActivity {
             mStatusReceiver.stop();
     }
 
-    private void addLineToResults(final String lineToAdd)
+    public void addLineToResults(final String lineToAdd)
     {
         mResults += lineToAdd + "\n";
         updateAndScrollDownTextView();
