@@ -1,16 +1,50 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.DatawedgeBenchmark" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
+    <!-- Original theme (kept for backwards compatibility) -->
+    <style name="Theme.DatawedgeBenchmark.Legacy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Modern DataWedge Benchmark Theme - Night mode uses same dark theme -->
+    <style name="Theme.DatawedgeBenchmark" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Primary brand color - Deep Navy -->
+        <item name="colorPrimary">@color/dw_primary</item>
+        <item name="colorPrimaryVariant">@color/dw_primary_dark</item>
+        <item name="colorOnPrimary">@color/dw_text_primary</item>
+
+        <!-- Secondary brand color - Steel Blue -->
+        <item name="colorSecondary">@color/dw_accent</item>
+        <item name="colorSecondaryVariant">@color/dw_accent_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Background and Surface -->
+        <item name="android:colorBackground">@color/dw_primary</item>
+        <item name="colorSurface">@color/dw_surface</item>
+        <item name="colorOnSurface">@color/dw_text_primary</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/dw_primary_dark</item>
+        <item name="android:navigationBarColor">@color/dw_primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/dw_text_primary</item>
+        <item name="android:textColorSecondary">@color/dw_text_secondary</item>
+        <item name="android:textColorHint">@color/dw_text_hint</item>
+
+        <!-- Button style -->
+        <item name="materialButtonStyle">@style/Widget.DatawedgeBenchmark.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.DatawedgeBenchmark.Button.Outlined</item>
+
+        <!-- Card style -->
+        <item name="materialCardViewStyle">@style/Widget.DatawedgeBenchmark.CardView</item>
+
+        <!-- Toolbar -->
+        <item name="toolbarStyle">@style/Widget.DatawedgeBenchmark.Toolbar</item>
     </style>
 </resources>

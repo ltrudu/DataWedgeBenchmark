@@ -2,9 +2,12 @@
     <string name="app_name">DatawedgeBenchmark</string>
 
     <!-- Layout strings -->
-    <string name="label_nb_scans">Nb Scans:</string>
-    <string name="label_time_elapsed">Time elapsed: </string>
-    <string name="label_scans_per_second">Scans/s: </string>
+    <string name="label_nb_scans">SCANS</string>
+    <string name="label_time_elapsed">TIME ELAPSED</string>
+    <string name="label_scans_per_second">SCANS/S</string>
+    <string name="label_scanner_device">SCANNER DEVICE</string>
+    <string name="label_activity_log">ACTIVITY LOG</string>
+    <string name="expand_collapse">Expand/Collapse</string>
     <string name="default_zero">0</string>
     <string name="default_time">00:00:00.000</string>
     <string name="default_na">N/A</string>

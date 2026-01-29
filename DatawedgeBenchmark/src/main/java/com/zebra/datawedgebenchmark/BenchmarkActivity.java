@@ -7,10 +7,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import androidx.core.widget.NestedScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -42,9 +46,12 @@ import java.util.List;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.button.MaterialButton;
 
 public class BenchmarkActivity extends AppCompatActivity {
 
@@ -53,7 +60,7 @@ public class BenchmarkActivity extends AppCompatActivity {
     public static BenchmarkActivity benchmarkActivity = null;
 
     private TextView et_results;
-    private ScrollView sv_results;
+    private NestedScrollView sv_results;
     private String mResults = "";
 
     private TextView tv_nbScans;
@@ -89,17 +96,29 @@ public class BenchmarkActivity extends AppCompatActivity {
     private Handler mScrollDownHandler = null;
     private Runnable mScrollDownRunnable = null;
 
+    /*
+        Activity log expand/collapse
+     */
+    private LinearLayout ll_log_header;
+    private LinearLayout ll_log_content;
+    private ImageView iv_expand_icon;
+    private boolean isLogExpanded = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_benchmark);
+
+        // Set up toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
 
         et_results = findViewById(R.id.et_results);
         sv_results = findViewById(R.id.sv_status);
@@ -115,6 +134,18 @@ public class BenchmarkActivity extends AppCompatActivity {
         bt_start.setEnabled(false);
         bt_burstmode.setEnabled(false);
         sp_ScannerDevices.setEnabled(false);
+
+        // Set up expandable activity log
+        ll_log_header = findViewById(R.id.ll_log_header);
+        ll_log_content = findViewById(R.id.ll_log_content);
+        iv_expand_icon = findViewById(R.id.iv_expand_icon);
+
+        ll_log_header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleLogExpand();
+            }
+        });
 
         /**
          * Initialize the scan receiver
@@ -433,8 +464,8 @@ public class BenchmarkActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(BenchmarkActivity.this, android.R.layout.simple_spinner_item, fFriendlyNameList);
-                        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(BenchmarkActivity.this, R.layout.spinner_item, fFriendlyNameList);
+                        spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                         sp_ScannerDevices.setAdapter(spinnerAdapter);
                         sp_ScannerDevices.setSelection(fDefaultIndex);
                         mScannerIndex = fDefaultIndex;
@@ -525,7 +556,7 @@ public class BenchmarkActivity extends AppCompatActivity {
                             sv_results.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sv_results.fullScroll(ScrollView.FOCUS_DOWN);
+                                    sv_results.fullScroll(View.FOCUS_DOWN);
                                 }
                             });
                         }
@@ -538,6 +569,30 @@ public class BenchmarkActivity extends AppCompatActivity {
             mScrollDownHandler.removeCallbacks(mScrollDownRunnable);
         }
         mScrollDownHandler.postDelayed(mScrollDownRunnable, 300);
+    }
+
+    private void toggleLogExpand() {
+        isLogExpanded = !isLogExpanded;
+
+        if (isLogExpanded) {
+            ll_log_content.setVisibility(View.VISIBLE);
+            // Rotate arrow up
+            RotateAnimation rotateAnimation = new RotateAnimation(0, 180,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(200);
+            rotateAnimation.setFillAfter(true);
+            iv_expand_icon.startAnimation(rotateAnimation);
+        } else {
+            ll_log_content.setVisibility(View.GONE);
+            // Rotate arrow down
+            RotateAnimation rotateAnimation = new RotateAnimation(180, 0,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(200);
+            rotateAnimation.setFillAfter(true);
+            iv_expand_icon.startAnimation(rotateAnimation);
+        }
     }
 
     private void toggleBurstMode()

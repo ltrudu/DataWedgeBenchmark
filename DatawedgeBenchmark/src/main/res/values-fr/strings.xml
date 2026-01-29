@@ -2,9 +2,12 @@
     <string name="app_name">DatawedgeBenchmark</string>
 
     <!-- Layout strings -->
-    <string name="label_nb_scans">Nb Scans :</string>
-    <string name="label_time_elapsed">Temps écoulé : </string>
-    <string name="label_scans_per_second">Scans/s : </string>
+    <string name="label_nb_scans">SCANS</string>
+    <string name="label_time_elapsed">TEMPS ÉCOULÉ</string>
+    <string name="label_scans_per_second">SCANS/S</string>
+    <string name="label_scanner_device">APPAREIL SCANNER</string>
+    <string name="label_activity_log">JOURNAL D\'ACTIVITÉ</string>
+    <string name="expand_collapse">Développer/Réduire</string>
     <string name="default_zero">0</string>
     <string name="default_time">00:00:00.000</string>
     <string name="default_na">N/A</string>
@@ -14,8 +17,8 @@
     <string name="btn_reset">Réinitialiser</string>
     <string name="btn_burst_mode">Mode Rafale</string>
     <string name="btn_normal_mode">Mode Normal</string>
-    <string name="btn_stop_benchmark">Arrêter le Benchmark</string>
-    <string name="btn_start_benchmark">Démarrer le Benchmark</string>
+    <string name="btn_stop_benchmark">Arrêter</string>
+    <string name="btn_start_benchmark">Démarrer</string>
 
     <!-- Menu -->
     <string name="menu_reset_profile">Réinitialiser le Profil</string>

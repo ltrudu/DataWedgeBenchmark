@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Original colors (keep for backwards compatibility) -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,50 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- DataWedge Benchmark Theme Colors (from icon) -->
+    <!-- Primary - Deep Navy Blue -->
+    <color name="dw_primary">#0D1B2A</color>
+    <color name="dw_primary_dark">#050D14</color>
+    <color name="dw_primary_light">#1B263B</color>
+
+    <!-- Secondary - Steel Blue -->
+    <color name="dw_secondary">#415A77</color>
+    <color name="dw_secondary_dark">#2C3E50</color>
+    <color name="dw_secondary_light">#778DA9</color>
+
+    <!-- Accent - Orange -->
+    <color name="dw_accent">#E85D04</color>
+    <color name="dw_accent_dark">#D45500</color>
+    <color name="dw_accent_light">#F77F00</color>
+
+    <!-- Surface colors -->
+    <color name="dw_surface">#1B263B</color>
+    <color name="dw_surface_elevated">#243447</color>
+    <color name="dw_card_background">#1E3048</color>
+
+    <!-- Text colors -->
+    <color name="dw_text_primary">#E0E1DD</color>
+    <color name="dw_text_secondary">#A8B2BD</color>
+    <color name="dw_text_hint">#778DA9</color>
+
+    <!-- Status colors -->
+    <color name="dw_success">#4CAF50</color>
+    <color name="dw_error">#EF5350</color>
+    <color name="dw_warning">#FFA726</color>
+
+    <!-- Metallic/Chrome accent -->
+    <color name="dw_metallic">#C0C5CE</color>
+    <color name="dw_metallic_dark">#8D99AE</color>
+
+    <!-- Divider -->
+    <color name="dw_divider">#2C3E50</color>
+
+    <!-- Button colors -->
+    <color name="dw_button_primary">#E85D04</color>
+    <color name="dw_button_secondary">#415A77</color>
+    <color name="dw_button_text">#FFFFFF</color>
+
+    <!-- Ripple -->
+    <color name="dw_ripple">#40E85D04</color>
 </resources>
